@@ -1,0 +1,371 @@
+
+AMIT_GRADUATION_PROJECT.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000020a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000025e  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000025e  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000290  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000108  00000000  00000000  000002cc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000b37  00000000  00000000  000003d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000006e9  00000000  00000000  00000f0b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000792  00000000  00000000  000015f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000001a0  00000000  00000000  00001d88  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000004ca  00000000  00000000  00001f28  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000048e  00000000  00000000  000023f2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 000000c8  00000000  00000000  00002880  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 b1 00 	call	0x162	; 0x162 <main>
+  64:	0c 94 03 01 	jmp	0x206	; 0x206 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <DCM_moveForward>:
+	CLR_BIT(DCM_MOTOR_PORT, DCM_INT_3_PIN);
+	CLR_BIT(DCM_MOTOR_PORT, DCM_INT_4_PIN);
+}
+void DCM_moveForward(void)
+{
+	SET_BIT(DCM_MOTOR_PORT, DCM_INT_1_PIN);
+  6c:	d9 9a       	sbi	0x1b, 1	; 27
+	CLR_BIT(DCM_MOTOR_PORT, DCM_INT_2_PIN);
+  6e:	da 98       	cbi	0x1b, 2	; 27
+	CLR_BIT(DCM_MOTOR_PORT, DCM_INT_3_PIN);
+  70:	db 98       	cbi	0x1b, 3	; 27
+	SET_BIT(DCM_MOTOR_PORT, DCM_INT_4_PIN);
+  72:	dc 9a       	sbi	0x1b, 4	; 27
+  74:	08 95       	ret
+
+00000076 <DIO_setPinDirection>:
+#include "DIO_interface.h"
+
+//PIN FUNCTIONS
+void DIO_setPinDirection(u8 PortID, u8 PinID, u8 PinDirection)
+{
+	if ((PortID <= 3) && (PinID <= 7) && ((PinDirection == DIO_PIN_OUTPUT ) || (PinDirection == DIO_PIN_INPUT)))
+  76:	84 30       	cpi	r24, 0x04	; 4
+  78:	08 f0       	brcs	.+2      	; 0x7c <DIO_setPinDirection+0x6>
+  7a:	72 c0       	rjmp	.+228    	; 0x160 <DIO_setPinDirection+0xea>
+  7c:	68 30       	cpi	r22, 0x08	; 8
+  7e:	08 f0       	brcs	.+2      	; 0x82 <DIO_setPinDirection+0xc>
+  80:	6f c0       	rjmp	.+222    	; 0x160 <DIO_setPinDirection+0xea>
+  82:	42 30       	cpi	r20, 0x02	; 2
+  84:	08 f0       	brcs	.+2      	; 0x88 <DIO_setPinDirection+0x12>
+  86:	6c c0       	rjmp	.+216    	; 0x160 <DIO_setPinDirection+0xea>
+	{
+		switch (PortID){
+  88:	81 30       	cpi	r24, 0x01	; 1
+  8a:	01 f1       	breq	.+64     	; 0xcc <DIO_setPinDirection+0x56>
+  8c:	30 f0       	brcs	.+12     	; 0x9a <DIO_setPinDirection+0x24>
+  8e:	82 30       	cpi	r24, 0x02	; 2
+  90:	b1 f1       	breq	.+108    	; 0xfe <DIO_setPinDirection+0x88>
+  92:	83 30       	cpi	r24, 0x03	; 3
+  94:	09 f4       	brne	.+2      	; 0x98 <DIO_setPinDirection+0x22>
+  96:	4c c0       	rjmp	.+152    	; 0x130 <DIO_setPinDirection+0xba>
+  98:	08 95       	ret
+			case DIO_PORTA:
+			if(PinDirection == DIO_PIN_OUTPUT){
+  9a:	41 30       	cpi	r20, 0x01	; 1
+  9c:	59 f4       	brne	.+22     	; 0xb4 <DIO_setPinDirection+0x3e>
+				SET_BIT(DDRA, PinID);
+  9e:	2a b3       	in	r18, 0x1a	; 26
+  a0:	81 e0       	ldi	r24, 0x01	; 1
+  a2:	90 e0       	ldi	r25, 0x00	; 0
+  a4:	02 c0       	rjmp	.+4      	; 0xaa <DIO_setPinDirection+0x34>
+  a6:	88 0f       	add	r24, r24
+  a8:	99 1f       	adc	r25, r25
+  aa:	6a 95       	dec	r22
+  ac:	e2 f7       	brpl	.-8      	; 0xa6 <DIO_setPinDirection+0x30>
+  ae:	82 2b       	or	r24, r18
+  b0:	8a bb       	out	0x1a, r24	; 26
+  b2:	08 95       	ret
+				}else{
+				CLR_BIT(DDRA, PinID);
+  b4:	2a b3       	in	r18, 0x1a	; 26
+  b6:	81 e0       	ldi	r24, 0x01	; 1
+  b8:	90 e0       	ldi	r25, 0x00	; 0
+  ba:	02 c0       	rjmp	.+4      	; 0xc0 <DIO_setPinDirection+0x4a>
+  bc:	88 0f       	add	r24, r24
+  be:	99 1f       	adc	r25, r25
+  c0:	6a 95       	dec	r22
+  c2:	e2 f7       	brpl	.-8      	; 0xbc <DIO_setPinDirection+0x46>
+  c4:	80 95       	com	r24
+  c6:	82 23       	and	r24, r18
+  c8:	8a bb       	out	0x1a, r24	; 26
+  ca:	08 95       	ret
+			}
+			break;
+			
+			case DIO_PORTB:
+			if(PinDirection == DIO_PIN_OUTPUT){
+  cc:	41 30       	cpi	r20, 0x01	; 1
+  ce:	59 f4       	brne	.+22     	; 0xe6 <DIO_setPinDirection+0x70>
+				SET_BIT(DDRB, PinID);
+  d0:	27 b3       	in	r18, 0x17	; 23
+  d2:	81 e0       	ldi	r24, 0x01	; 1
+  d4:	90 e0       	ldi	r25, 0x00	; 0
+  d6:	02 c0       	rjmp	.+4      	; 0xdc <DIO_setPinDirection+0x66>
+  d8:	88 0f       	add	r24, r24
+  da:	99 1f       	adc	r25, r25
+  dc:	6a 95       	dec	r22
+  de:	e2 f7       	brpl	.-8      	; 0xd8 <DIO_setPinDirection+0x62>
+  e0:	82 2b       	or	r24, r18
+  e2:	87 bb       	out	0x17, r24	; 23
+  e4:	08 95       	ret
+				}else{
+				CLR_BIT(DDRB, PinID);
+  e6:	27 b3       	in	r18, 0x17	; 23
+  e8:	81 e0       	ldi	r24, 0x01	; 1
+  ea:	90 e0       	ldi	r25, 0x00	; 0
+  ec:	02 c0       	rjmp	.+4      	; 0xf2 <DIO_setPinDirection+0x7c>
+  ee:	88 0f       	add	r24, r24
+  f0:	99 1f       	adc	r25, r25
+  f2:	6a 95       	dec	r22
+  f4:	e2 f7       	brpl	.-8      	; 0xee <DIO_setPinDirection+0x78>
+  f6:	80 95       	com	r24
+  f8:	82 23       	and	r24, r18
+  fa:	87 bb       	out	0x17, r24	; 23
+  fc:	08 95       	ret
+			}
+			break;
+			
+			case DIO_PORTC:
+			if(PinDirection == DIO_PIN_OUTPUT){
+  fe:	41 30       	cpi	r20, 0x01	; 1
+ 100:	59 f4       	brne	.+22     	; 0x118 <DIO_setPinDirection+0xa2>
+				SET_BIT(DDRC, PinID);
+ 102:	24 b3       	in	r18, 0x14	; 20
+ 104:	81 e0       	ldi	r24, 0x01	; 1
+ 106:	90 e0       	ldi	r25, 0x00	; 0
+ 108:	02 c0       	rjmp	.+4      	; 0x10e <DIO_setPinDirection+0x98>
+ 10a:	88 0f       	add	r24, r24
+ 10c:	99 1f       	adc	r25, r25
+ 10e:	6a 95       	dec	r22
+ 110:	e2 f7       	brpl	.-8      	; 0x10a <DIO_setPinDirection+0x94>
+ 112:	82 2b       	or	r24, r18
+ 114:	84 bb       	out	0x14, r24	; 20
+ 116:	08 95       	ret
+				}else{
+				CLR_BIT(DDRC, PinID);
+ 118:	24 b3       	in	r18, 0x14	; 20
+ 11a:	81 e0       	ldi	r24, 0x01	; 1
+ 11c:	90 e0       	ldi	r25, 0x00	; 0
+ 11e:	02 c0       	rjmp	.+4      	; 0x124 <DIO_setPinDirection+0xae>
+ 120:	88 0f       	add	r24, r24
+ 122:	99 1f       	adc	r25, r25
+ 124:	6a 95       	dec	r22
+ 126:	e2 f7       	brpl	.-8      	; 0x120 <DIO_setPinDirection+0xaa>
+ 128:	80 95       	com	r24
+ 12a:	82 23       	and	r24, r18
+ 12c:	84 bb       	out	0x14, r24	; 20
+ 12e:	08 95       	ret
+			}
+			break;
+			
+			case DIO_PORTD:
+			if(PinDirection == DIO_PIN_OUTPUT){
+ 130:	41 30       	cpi	r20, 0x01	; 1
+ 132:	59 f4       	brne	.+22     	; 0x14a <DIO_setPinDirection+0xd4>
+				SET_BIT(DDRD, PinID);
+ 134:	22 b3       	in	r18, 0x12	; 18
+ 136:	81 e0       	ldi	r24, 0x01	; 1
+ 138:	90 e0       	ldi	r25, 0x00	; 0
+ 13a:	02 c0       	rjmp	.+4      	; 0x140 <DIO_setPinDirection+0xca>
+ 13c:	88 0f       	add	r24, r24
+ 13e:	99 1f       	adc	r25, r25
+ 140:	6a 95       	dec	r22
+ 142:	e2 f7       	brpl	.-8      	; 0x13c <DIO_setPinDirection+0xc6>
+ 144:	82 2b       	or	r24, r18
+ 146:	82 bb       	out	0x12, r24	; 18
+ 148:	08 95       	ret
+				}else{
+				CLR_BIT(DDRD, PinID);
+ 14a:	22 b3       	in	r18, 0x12	; 18
+ 14c:	81 e0       	ldi	r24, 0x01	; 1
+ 14e:	90 e0       	ldi	r25, 0x00	; 0
+ 150:	02 c0       	rjmp	.+4      	; 0x156 <DIO_setPinDirection+0xe0>
+ 152:	88 0f       	add	r24, r24
+ 154:	99 1f       	adc	r25, r25
+ 156:	6a 95       	dec	r22
+ 158:	e2 f7       	brpl	.-8      	; 0x152 <DIO_setPinDirection+0xdc>
+ 15a:	80 95       	com	r24
+ 15c:	82 23       	and	r24, r18
+ 15e:	82 bb       	out	0x12, r24	; 18
+ 160:	08 95       	ret
+
+00000162 <main>:
+#include "DCM_config.h"
+#include "SERVO_interface.h"
+int main(void)
+{
+	//SERVO 
+	DIO_setPinDirection(DIO_PORTD, DIO_PIN5, DIO_PIN_OUTPUT);
+ 162:	41 e0       	ldi	r20, 0x01	; 1
+ 164:	65 e0       	ldi	r22, 0x05	; 5
+ 166:	83 e0       	ldi	r24, 0x03	; 3
+ 168:	0e 94 3b 00 	call	0x76	; 0x76 <DIO_setPinDirection>
+	SERVO_timer1Init();
+ 16c:	0e 94 d4 00 	call	0x1a8	; 0x1a8 <SERVO_timer1Init>
+	SERVO_timer1start();
+ 170:	0e 94 eb 00 	call	0x1d6	; 0x1d6 <SERVO_timer1start>
+    //INTIALIZE MOTOR PINS
+	DIO_setPinDirection(DCM_MOTOR_PORT, DCM_INT_1_PIN, DIO_PIN_OUTPUT);
+ 174:	8b b3       	in	r24, 0x1b	; 27
+ 176:	41 e0       	ldi	r20, 0x01	; 1
+ 178:	61 e0       	ldi	r22, 0x01	; 1
+ 17a:	0e 94 3b 00 	call	0x76	; 0x76 <DIO_setPinDirection>
+	DIO_setPinDirection(DCM_MOTOR_PORT, DCM_INT_2_PIN, DIO_PIN_OUTPUT);
+ 17e:	8b b3       	in	r24, 0x1b	; 27
+ 180:	41 e0       	ldi	r20, 0x01	; 1
+ 182:	62 e0       	ldi	r22, 0x02	; 2
+ 184:	0e 94 3b 00 	call	0x76	; 0x76 <DIO_setPinDirection>
+	DIO_setPinDirection(DCM_MOTOR_PORT, DCM_INT_3_PIN, DIO_PIN_OUTPUT);
+ 188:	8b b3       	in	r24, 0x1b	; 27
+ 18a:	41 e0       	ldi	r20, 0x01	; 1
+ 18c:	63 e0       	ldi	r22, 0x03	; 3
+ 18e:	0e 94 3b 00 	call	0x76	; 0x76 <DIO_setPinDirection>
+	DIO_setPinDirection(DCM_MOTOR_PORT, DCM_INT_4_PIN, DIO_PIN_OUTPUT);
+ 192:	8b b3       	in	r24, 0x1b	; 27
+ 194:	41 e0       	ldi	r20, 0x01	; 1
+ 196:	64 e0       	ldi	r22, 0x04	; 4
+ 198:	0e 94 3b 00 	call	0x76	; 0x76 <DIO_setPinDirection>
+	//CALL ACTION
+	DCM_moveForward();
+ 19c:	0e 94 36 00 	call	0x6c	; 0x6c <DCM_moveForward>
+	SERVO_setServoAngle(90);
+ 1a0:	8a e5       	ldi	r24, 0x5A	; 90
+ 1a2:	0e 94 f5 00 	call	0x1ea	; 0x1ea <SERVO_setServoAngle>
+ 1a6:	ff cf       	rjmp	.-2      	; 0x1a6 <main+0x44>
+
+000001a8 <SERVO_timer1Init>:
+	CLR_BIT(TCCR1B, 1);
+	CLR_BIT(TCCR1B, 2);
+}
+void SERVO_timer1_A_setCompareValue(u16 OCR1A_value)
+{
+	OCR1A_u16 = OCR1A_value;
+ 1a8:	8f b5       	in	r24, 0x2f	; 47
+ 1aa:	8e 7f       	andi	r24, 0xFE	; 254
+ 1ac:	8f bd       	out	0x2f, r24	; 47
+ 1ae:	8f b5       	in	r24, 0x2f	; 47
+ 1b0:	82 60       	ori	r24, 0x02	; 2
+ 1b2:	8f bd       	out	0x2f, r24	; 47
+ 1b4:	8e b5       	in	r24, 0x2e	; 46
+ 1b6:	88 60       	ori	r24, 0x08	; 8
+ 1b8:	8e bd       	out	0x2e, r24	; 46
+ 1ba:	8e b5       	in	r24, 0x2e	; 46
+ 1bc:	80 61       	ori	r24, 0x10	; 16
+ 1be:	8e bd       	out	0x2e, r24	; 46
+ 1c0:	8f b5       	in	r24, 0x2f	; 47
+ 1c2:	8f 7b       	andi	r24, 0xBF	; 191
+ 1c4:	8f bd       	out	0x2f, r24	; 47
+ 1c6:	8f b5       	in	r24, 0x2f	; 47
+ 1c8:	80 68       	ori	r24, 0x80	; 128
+ 1ca:	8f bd       	out	0x2f, r24	; 47
+ 1cc:	87 e8       	ldi	r24, 0x87	; 135
+ 1ce:	93 e1       	ldi	r25, 0x13	; 19
+ 1d0:	97 bd       	out	0x27, r25	; 39
+ 1d2:	86 bd       	out	0x26, r24	; 38
+ 1d4:	08 95       	ret
+
+000001d6 <SERVO_timer1start>:
+ 1d6:	8e b5       	in	r24, 0x2e	; 46
+ 1d8:	81 60       	ori	r24, 0x01	; 1
+ 1da:	8e bd       	out	0x2e, r24	; 46
+ 1dc:	8e b5       	in	r24, 0x2e	; 46
+ 1de:	82 60       	ori	r24, 0x02	; 2
+ 1e0:	8e bd       	out	0x2e, r24	; 46
+ 1e2:	8e b5       	in	r24, 0x2e	; 46
+ 1e4:	8b 7f       	andi	r24, 0xFB	; 251
+ 1e6:	8e bd       	out	0x2e, r24	; 46
+ 1e8:	08 95       	ret
+
+000001ea <SERVO_setServoAngle>:
+}
+void SERVO_setServoAngle(u8 angle)
+{
+	if(angle == 90)
+ 1ea:	8a 35       	cpi	r24, 0x5A	; 90
+ 1ec:	29 f4       	brne	.+10     	; 0x1f8 <SERVO_setServoAngle+0xe>
+	CLR_BIT(TCCR1B, 1);
+	CLR_BIT(TCCR1B, 2);
+}
+void SERVO_timer1_A_setCompareValue(u16 OCR1A_value)
+{
+	OCR1A_u16 = OCR1A_value;
+ 1ee:	84 ef       	ldi	r24, 0xF4	; 244
+ 1f0:	91 e0       	ldi	r25, 0x01	; 1
+ 1f2:	9b bd       	out	0x2b, r25	; 43
+ 1f4:	8a bd       	out	0x2a, r24	; 42
+ 1f6:	08 95       	ret
+	}
+	else if(angle == -90)
+	{
+		SERVO_timer1_A_setCompareValue(200);
+	}
+	else if(angle == 0)
+ 1f8:	81 11       	cpse	r24, r1
+ 1fa:	04 c0       	rjmp	.+8      	; 0x204 <SERVO_setServoAngle+0x1a>
+	CLR_BIT(TCCR1B, 1);
+	CLR_BIT(TCCR1B, 2);
+}
+void SERVO_timer1_A_setCompareValue(u16 OCR1A_value)
+{
+	OCR1A_u16 = OCR1A_value;
+ 1fc:	87 e7       	ldi	r24, 0x77	; 119
+ 1fe:	91 e0       	ldi	r25, 0x01	; 1
+ 200:	9b bd       	out	0x2b, r25	; 43
+ 202:	8a bd       	out	0x2a, r24	; 42
+ 204:	08 95       	ret
+
+00000206 <_exit>:
+ 206:	f8 94       	cli
+
+00000208 <__stop_program>:
+ 208:	ff cf       	rjmp	.-2      	; 0x208 <__stop_program>
