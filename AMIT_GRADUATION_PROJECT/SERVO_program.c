@@ -34,18 +34,18 @@ void SERVO_timer1_A_setCompareValue(u16 OCR1A_value)
 {
 	OCR1A_u16 = OCR1A_value;
 }
-void SERVO_setServoAngle(u8 angle)
+void SERVO_setServoAngle(s8 angle)
 {
 	if(angle == 90)
 	{
-		SERVO_timer1_A_setCompareValue(500);
+		SERVO_timer1_A_setCompareValue(499);
 	}
 	else if(angle == -90)
 	{
-		SERVO_timer1_A_setCompareValue(200);
+		SERVO_timer1_A_setCompareValue(249);
 	}
 	else if(angle == 0)
 	{
-		SERVO_timer1_A_setCompareValue(375);
+		SERVO_timer1_A_setCompareValue(374);
 	}
 }
