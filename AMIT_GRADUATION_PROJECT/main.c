@@ -13,6 +13,8 @@ int main(void)
 	//SERVO 
 	DIO_setPinDirection(DIO_PORTD, DIO_PIN5, DIO_PIN_OUTPUT);
 	SERVO_timer1Init();
+	//Angles (90 , -90 , 0)
+	SERVO_setServoAngle(-90);
 	SERVO_timer1start();
     //INTIALIZE MOTOR PINS
 	DIO_setPinDirection(DCM_MOTOR_PORT, DCM_INT_1_PIN, DIO_PIN_OUTPUT);
@@ -21,7 +23,6 @@ int main(void)
 	DIO_setPinDirection(DCM_MOTOR_PORT, DCM_INT_4_PIN, DIO_PIN_OUTPUT);
 	//CALL ACTION
 	DCM_moveForward();
-	SERVO_setServoAngle(90);
     while (1) 
     {
 		
